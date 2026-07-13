@@ -1,0 +1,2 @@
+#e1(10Jul2026:12:20:25): source ./xcelium.d/env.d/env.history.10Jul2026_12_20_25
+s1(10Jul2026:12:20:25):  xrun -top test_top -gui -f run.args 

@@ -1,0 +1,12 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+
+test_top
+-ACCESS
+rwc
+-COVERAGE
+all
+-timescale
+1ns/1ps

@@ -1,0 +1,21 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-INCDIR
+/home/student24/ifx_summer_school_2026
+-INCDIR
+/home/student24/ifx_summer_school_2026/source
+-INCDIR
+/home/student24/ifx_summer_school_2026/source/sv/rtl
+-INCDIR
+/home/student24/ifx_summer_school_2026/source/sv/rtl/tb
+-sv
+-LINEDEBUG
+-UVMLINEDEBUG
+-I_INCDIR
+/opt/cadence/installs/XCELIUM2409/tools/methodology/UVM/CDNS-1.1d/sv/src
+-DEFINE
+USE_PARAMETERIZED_WRAPPER
+-I_INCDIR
+/opt/cadence/installs/XCELIUM2409/tools/methodology/UVM/CDNS-1.1d/additions/sv

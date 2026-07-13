@@ -4,5 +4,9 @@ package ifx_dig_regblock_pkg;
   `include "uvm_macros.svh"
 
   // TODO DAY2: Add include for register model classes here
+  `include "ifx_dig_field.svh"
+  `include "ifx_dig_registers.svh"
+  `include "ifx_dig_regblock.svh"
+
 
 endpackage

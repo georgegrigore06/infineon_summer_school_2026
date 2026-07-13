@@ -35,11 +35,39 @@ module ifx_dig_top;
 
   reg clk;
 
+  
+
   // TODO DAY1: Create DUT instance and connect to the wires here.
+  top dut(
+    .clk_i(clk_i_w),
+    .rstn_i(rstn_i_w),
+    .acc_en_i(acc_en_i),
+    .wr_en_i(wr_en_i_w),
+
+    .addr_i(addr_i_w),
+    .wdata_i(wdata_i_w),
+    .rdata_o(rdata_o_w),
+
+    .input_i(inputs_i_w),
+    .out_o(output_o_w)
+  );
 
 
   // TODO DAY1: Create interface instances and connect to DUT here.
 
+  ifx_dig_interface dig_if(
+    .clk_i(clk_i_w),
+    .rstn_i(rstn_i_w),
+    .acc_en_i(acc_en_i),
+    .wr_en_i(wr_en_i_w),
+
+    .addr_i(addr_i_w),
+    .wdata_i(wdata_i_w),
+    .rdata_o(rdata_o_w),
+
+    .inputs_i(inputs_i_w),
+    .output_o(output_o_w)
+  );
 
   ifx_dig_data_bus_uvc_interface data_uvc_if(
     .clk_i(clk_i_w),
@@ -55,13 +83,21 @@ module ifx_dig_top;
 
   // TODO DAY1: Complete generate_clock task and use it to generate the system clock with a frequency of 40 MHz
   initial begin
-    generate_clock("ns", 1000); 
+    generate_clock("ns", 25); 
   end
 
 
 
   task generate_clock(string time_unit, int period);
-   
+    clk_i_w = 0;
+    time half_period;
+    case(time_unit)
+      "ns": half_period = (period/2.0);
+      "us": half_period = (period/2.0) * 1us; 
+      "ms": half_period = (period/2.0) * 1ms;
+      "s": half_period = (period/2.0) * 1s;
+    endcase
+    forever #(half_period) clk_i_w = ~clk_i_w;
   endtask
 
 

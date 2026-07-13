@@ -18,5 +18,5 @@ package ifx_dig_test_pkg;
   // TODO DAY1: Add include for simple hello world test 
 
   `include "ifx_dig_counter_mode_test.svh"
-	
+	`include "ifx_dig_hello_world.svh"
 endpackage

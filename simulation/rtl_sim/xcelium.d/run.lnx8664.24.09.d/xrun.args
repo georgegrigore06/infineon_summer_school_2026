@@ -1,9 +1,0 @@
-//
-// File created by:  xrun
-// Do not modify this file
-//
--top
-test_top
--gui
--f
-run.args

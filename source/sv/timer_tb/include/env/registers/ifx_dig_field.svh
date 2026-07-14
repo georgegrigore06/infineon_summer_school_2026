@@ -1,4 +1,3 @@
-
 typedef enum int {R, W, RW, RES} field_access_type_t;
 
 class ifx_dig_field extends uvm_object;

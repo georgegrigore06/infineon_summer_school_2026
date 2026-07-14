@@ -61,7 +61,7 @@ class ifx_dig_testbase extends uvm_test;
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     // TODO DAY2: Add infomessage for this phase
-
+    `uvm_info(get_full_name(), ">>>>> TESTBASE BUILD_PHASE starts <<<<<", UVM_NONE)
     //------------------=====================================---------------
     //-=========================- CREATE CONFIGURATION OBJECT -=========================-
     //------------------=====================================---------------
@@ -94,14 +94,15 @@ class ifx_dig_testbase extends uvm_test;
     data_bus_seq        = ifx_dig_data_bus_uvc_sequence::type_id::create("data_bus_seq", this);
     data_bus_read_seq   = ifx_dig_data_bus_uvc_read_sequence::type_id::create("data_bus_read_seq", this);
     data_bus_write_seq  = ifx_dig_data_bus_uvc_write_sequence::type_id::create("data_bus_write_seq", this);
-
+    `uvm_info(get_full_name(), ">>>>> TESTBASE BUILD_PHASE done <<<<<", UVM_NONE)
   endfunction : build_phase
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     // TODO DAY2: Add infomessage for this phase
-
+    `uvm_info(get_full_name(), ">>>>> TESTBASE CONNECT_PHASE starts <<<<<", UVM_NONE)
     // add necessary connections
+    `uvm_info(get_full_name(), ">>>>> TESTBASE CONNECT_PHASE done <<<<<", UVM_NONE)
   endfunction : connect_phase
 
   virtual function void end_of_elaboration_phase(uvm_phase phase);

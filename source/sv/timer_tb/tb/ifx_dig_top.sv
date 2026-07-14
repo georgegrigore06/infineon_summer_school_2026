@@ -5,13 +5,10 @@
  */
 
 `include "ifx_dig_defines.svh"
-`include"uvm_macros.svh"
+`include "uvm_macros.svh"
 
 module ifx_dig_top;
   import uvm_pkg::*;
-
-  import ifx_dig_data_bus_uvc_pkg::*;
-  import ifx_dig_pkg::*;
   import ifx_dig_test_pkg::*;
 
   initial begin
@@ -89,15 +86,15 @@ module ifx_dig_top;
 
 
   task generate_clock(string time_unit, int period);
-    clk_i_w = 0;
-    time half_period;
+    realtime half_period;
+    clk = 0;
     case(time_unit)
-      "ns": half_period = (period/2.0);
-      "us": half_period = (period/2.0) * 1us; 
-      "ms": half_period = (period/2.0) * 1ms;
-      "s": half_period = (period/2.0) * 1s;
+      "ns": half_period = (real'(period)/2.0);
+      "us": half_period = (real'(period)/2.0) * 1us; 
+      "ms": half_period = (real'(period)/2.0) * 1ms;
+      "s": half_period = (real'(period)/2.0) * 1s;
     endcase
-    forever #(half_period) clk_i_w = ~clk_i_w;
+    forever #(half_period) clk = ~clk;
   endtask
 
 

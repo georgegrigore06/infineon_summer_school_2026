@@ -21,10 +21,47 @@ class ifx_dig_regblock extends uvm_object;
     CTRL0.build();
 
     // TODO DAY2: Instantiate objects for each register
+    PWM_MODE = ifx_dig_reg_PWM_MODE::type_id::create("PWM_MODE");
+    PWM_MODE.configure(.address(1));
+    PWM_MODE.build();
+
+    CNT_TIMER_MODE0 = ifx_dig_reg_CNT_TIMER_MODE0::type_id::create("CNT_TIMER_MODE0");
+    CNT_TIMER_MODE0.configure(.address(2));
+    CNT_TIMER_MODE0.build();
+
+    CNT_TIMER_MODE1 = ifx_dig_reg_CNT_TIMER_MODE1::type_id::create("CNT_TIMER_MODE1");
+    CNT_TIMER_MODE1.configure(.address(3));
+    CNT_TIMER_MODE1.build();
+
+    ACT_CNT_VALUE = ifx_dig_reg_ACT_CNT_VALUE::type_id::create("ACT_CNT_VALUE");
+    ACT_CNT_VALUE.configure(.address(4));
+    ACT_CNT_VALUE.build();
+
+    COMMAND = ifx_dig_reg_COMMAND::type_id::create("COMMAND");
+    COMMAND.configure(.address(5));
+    COMMAND.build();
+
+    CAPTURE_STATUS = ifx_dig_reg_CAPTURE_STATUS::type_id::create("CAPTURE_STATUS");
+    CAPTURE_STATUS.configure(.address(6));
+    CAPTURE_STATUS.build();
   endfunction
 
   function ifx_dig_reg get_reg_by_name(string reg_name);
     // TODO DAY2: Implement logic for returning the right register object corresponding to the input string
+    case(reg_name)
+      "CTRL0"          : return CTRL0;
+      "PWM_MODE"       : return PWM_MODE;
+      "CNT_MODE0"      : return CNT_TIMER_MODE0;
+      "CNT_MODE1"      : return CNT_TIMER_MODE1;
+      "COUNTER_VALUE"  : return ACT_CNT_VALUE;
+      "COMMAND"        : return COMMAND;
+      "CAPTURE"        : return CAPTURE_STATUS;  
+      default: 
+        begin
+          `uvm_error(get_full_name(), "Name not found!")
+          return null;
+        end
+    endcase
   endfunction
 
   function ifx_dig_reg get_reg_by_address(int address);

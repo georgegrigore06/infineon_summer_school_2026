@@ -59,17 +59,25 @@ endfunction : new
 function void ifx_dig_scoreboard::build_phase(uvm_phase phase);
   super.build_phase(phase);
   // TODO DAY2: Add infomessage for this phase
+  `uvm_info(get_full_name(), ">>>>> SCOREBOARD BUILD_PHASE starts <<<<<", UVM_NONE)
 
   regblock = ifx_dig_regblock::type_id::create("regblock");
   regblock.build();
 
   // TODO DAY5: Get a handler to the virtual interface using the uvm_config_db mechanism
 
+
+
+  `uvm_info(get_full_name(), ">>>>> SCOREBOARD BUILD_PHASE done <<<<<", UVM_NONE)
+
 endfunction : build_phase
 
 function void ifx_dig_scoreboard::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
   // TODO DAY2: Add infomessage for this phase
+  `uvm_info(get_full_name(), ">>>>> SCOREBOARD CONNECT_PHASE starts <<<<<", UVM_NONE)
+  // add connections
+  `uvm_info(get_full_name(), ">>>>> SCOREBOARD CONNECT_PHASE done <<<<<", UVM_NONE)
 
 endfunction : connect_phase
 

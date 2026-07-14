@@ -25,7 +25,7 @@ class ifx_dig_env extends uvm_env;
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     // TODO DAY2: Add infomessage for this phase
-    `uvm_info (get_type_name(), $sformatf(">>>>>>>>>>>>ENV BUILD_PHASE starts<<<<<<<<<"), UVM_LOW)
+    `uvm_info (get_type_name(), $sformatf(">>>>> ENV BUILD_PHASE starts <<<<<"), UVM_LOW)
 
     scoreboard = ifx_dig_scoreboard::type_id::create("scoreboard", this);
 
@@ -34,18 +34,23 @@ class ifx_dig_env extends uvm_env;
 
     data_bus_uvc_agt              = ifx_dig_data_bus_uvc_agent::type_id::create("data_bus_uvc_agt", this);
 
+    `uvm_info (get_type_name(), $sformatf(">>>>> ENV BUILD_PHASE done <<<<<"), UVM_LOW)
+
   endfunction : build_phase
 
 
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     // TODO DAY2: Add infomessage for this phase
+    `uvm_info (get_type_name(), $sformatf(">>>>> ENV CONNECT_PHASE starts <<<<<"), UVM_LOW)
 
     scoreboard.p_env = this;
     scoreboard.p_env_cfg = p_dig_cfg;
 
     // TODO DAY5: Connect the TLM ports of the data bus monitor to the corresponding TLM export in the scoreboard
 
+
+    `uvm_info (get_type_name(), $sformatf(">>>>> ENV CONNECT_PHASE done <<<<<"), UVM_LOW)
 
   endfunction : connect_phase
 
@@ -59,7 +64,7 @@ class ifx_dig_env extends uvm_env;
 
   task run_phase(uvm_phase phase);
     super.run_phase(phase);
-    `uvm_info (get_type_name(), $sformatf(">>>>>>>>>>>>ENV RUN_PHASE starts<<<<<<<<<"), UVM_LOW)
+    `uvm_info (get_type_name(), $sformatf(">>>>> ENV RUN_PHASE starts <<<<<"), UVM_LOW)
 
 
   endtask : run_phase

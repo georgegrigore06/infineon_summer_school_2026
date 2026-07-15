@@ -148,6 +148,8 @@ class ifx_dig_reg_PWM_MODE extends ifx_dig_reg;
   res[1] = ifx_dig_field::type_id::create("res1");
   res[1].configure(.bit_size(2), .offset(14), .rst_value(0), .acc_type(RES));
   
+  fields_list = {res[1], frequency_sel, res[0], duty_cycle};
+
   endfunction
 endclass
 
@@ -189,6 +191,9 @@ class ifx_dig_reg_CNT_TIMER_MODE0 extends ifx_dig_reg;
 
     res[2] = ifx_dig_field::type_id::create("res2");
     res[2].configure(.bit_size(2), .offset(14), .rst_value(0), .acc_type(RES));
+  
+    fields_list = {res[2], capture_sel, res[1], out_function, res[0], trigger_sel, input_sel};
+
   endfunction
 endclass
 
@@ -211,6 +216,9 @@ class ifx_dig_reg_CNT_TIMER_MODE1 extends ifx_dig_reg;
 
   res = ifx_dig_field::type_id::create("res");
   res.configure(.bit_size(6), .offset(10), .rst_value(0), .acc_type(RES));
+  
+  fields_list = {res, target_value};
+  
   endfunction
 endclass
 
@@ -233,6 +241,9 @@ class ifx_dig_reg_ACT_CNT_VALUE extends ifx_dig_reg;
 
   res = ifx_dig_field::type_id::create("res");
   res.configure(.bit_size(6), .offset(10), .rst_value(0), .acc_type(RES));
+  
+  fields_list = {res, counter_value};
+  
   endfunction
 endclass
 
@@ -265,6 +276,8 @@ class ifx_dig_reg_COMMAND extends ifx_dig_reg;
   res[1] = ifx_dig_field::type_id::create("res1");
   res[1].configure(.bit_size(11), .offset(5), .rst_value(0), .acc_type(RES));
 
+  fields_list = {res[1], sw_trigger, res[0], clear};
+
   endfunction
 endclass
 
@@ -294,6 +307,9 @@ class ifx_dig_reg_CAPTURE_STATUS extends ifx_dig_reg;
   
   res[1] = ifx_dig_field::type_id::create("res1");
   res[1].configure(.bit_size(3), .offset(13), .rst_value(0), .acc_type(RES));
+
+
+  fields_list = {res[1], timer_running, res[0], capture_value};
 
   endfunction
 endclass

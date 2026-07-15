@@ -27,7 +27,7 @@
    function void build_phase(uvm_phase phase);
      super.build_phase(phase);
      // TODO DAY2: Add infomessage for this phase
-
+    `uvm_info(get_full_name(), ">>>>> COUNTER_MODE BUILD_PHASE starts <<<<<", UVM_NONE)
    endfunction : build_phase
 
    task run_phase(uvm_phase phase);
@@ -46,11 +46,11 @@
      // TODO DAY3: Refactor reset driving logic to use drive_reset task
      // TODO DAY4: Refactor test logic to use the write_reg_fields and read_reg tasks for register accesses
      `uvm_info("COUNTER_MODE_TEST", "Release reset", UVM_NONE)
-     dig_env.p_dig_cfg.dig_vif.rstn_i = 0;
-     `WAIT_NS(10)
-     dig_env.p_dig_cfg.dig_vif.rstn_i = 1;
-     `WAIT_MS(1)
-
+    //  dig_env.p_dig_cfg.dig_vif.rstn_i = 0;
+    //  `WAIT_NS(10)
+    //  dig_env.p_dig_cfg.dig_vif.rstn_i = 1;
+     drive_reset(10, TIME_LENGTH);
+    `WAIT_MS(1)
      // MODE0
      `uvm_info("COUNTER_MODE_TEST", "Configure COUNTER MODE", UVM_NONE)
      data_bus_write_seq.address = `CNT_TIMER_MODE0_ADDR;
@@ -86,6 +86,7 @@
       write_reg_fields("CTRL0", {"mode"}, {op_mode}, .read_after_write(1));
 
       //TODO DAY3: Add stimulus to toggle the selected input 10 times with a period of 100ns
+      drive_input_pulses(this.select_input, 10, 50);
       //TODO DAY4: Refactor the stimulus to toggle the selected input using a dedicated pin toggle sequence
 
      `WAIT_MS(20)

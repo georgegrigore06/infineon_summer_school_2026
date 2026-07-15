@@ -38,7 +38,7 @@ module ifx_dig_top;
   top dut(
     .clk_i(clk_i_w),
     .rstn_i(rstn_i_w),
-    .acc_en_i(acc_en_i),
+    .acc_en_i(acc_en_i_w),
     .wr_en_i(wr_en_i_w),
 
     .addr_i(addr_i_w),
@@ -55,7 +55,8 @@ module ifx_dig_top;
   ifx_dig_interface dig_if(
     .clk_i(clk_i_w),
     .rstn_i(rstn_i_w),
-    .acc_en_i(acc_en_i),
+    
+    .acc_en_i(acc_en_i_w),
     .wr_en_i(wr_en_i_w),
 
     .addr_i(addr_i_w),
@@ -72,6 +73,7 @@ module ifx_dig_top;
     
     .acc_en_o(acc_en_i_w),
     .wr_en_o(wr_en_i_w),
+
     .addr_o(addr_i_w),
     .wdata_o(wdata_i_w),
     .rdata_i(rdata_o_w)

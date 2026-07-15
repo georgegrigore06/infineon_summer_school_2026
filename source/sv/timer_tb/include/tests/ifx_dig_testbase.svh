@@ -47,12 +47,46 @@ class ifx_dig_testbase extends uvm_test;
 
   // TODO DAY3: Implement drive reset task which can drive reset for a given length in cycles or time depending on the input arguments
   task drive_reset(int length, reset_length_t reset_type);
+    time start_time, end_time, clock_period;
+    @(posedge dig_cfg.dig_vif.clk_i);
+    start_time = $realtime;
+    @(posedge dig_cfg.dig_vif.clk_i);
+    end_time = $realtime;
+    clock_period = end_time - start_time;
+
+    if((reset_type == TIME_LENGTH && length >= 3*clock_period) || 
+        (reset_type == CYCLES && length >= 3))
+      case(reset_type)
+        TIME_LENGTH:
+          begin
+            dig_cfg.dig_vif.rstn_i = 0;
+            #(length);
+            @(negedge dig_cfg.dig_vif.clk_i);
+            dig_cfg.dig_vif.rstn_i = 1;
+          end
+        CYCLES:
+          begin
+              dig_cfg.dig_vif.rstn_i = 0;
+              repeat(length) @(negedge dig_cfg.dig_vif.clk_i);
+              dig_cfg.dig_vif.rstn_i = 1;
+          end
+      endcase
+    else begin
+      dig_cfg.dig_vif.rstn_i = 0;
+      repeat(2) @(negedge dig_cfg.dig_vif.clk_i);
+      dig_cfg.dig_vif.rstn_i = 1;
+    end
   endtask : drive_reset
 
   // TODO DAY3: Implement logic for driving pulses to the counting inputs of the DUT
   task drive_input_pulses(int input_idx, int num_pulses, int half_period_ns);
     repeat(num_pulses) begin
+      dig_cfg.dig_vif.inputs_i[input_idx] = 0;
+      #(half_period_ns);
+      dig_cfg.dig_vif.inputs_i[input_idx] = 1;
+      #(half_period_ns);
     end
+    dig_cfg.dig_vif.inputs_i[input_idx] = 0;
   endtask : drive_input_pulses
 
   // Hook that can be overloaded in sub-classes to add configuration statements
@@ -160,14 +194,6 @@ class ifx_dig_testbase extends uvm_test;
 
   // TODO DAY4: Implement a task for reading a register using the data bus read sequence
   task read_reg(string reg_name);
-    ifx_dig_data_bus_uvc_read_sequence read_seq;
-    ifx_dig_reg reg_obj = dig_env.scoreboard.regblock.get_reg_by_name(reg_name);
-
-    read_seq         = ifx_dig_data_bus_uvc_read_sequence::type_id::create("read_seq", this);
-    read_seq.address = reg_obj.get_address();
-
-    `uvm_info("read_reg", $sformatf("Read register %s", reg_name), UVM_NONE)
-    read_seq.start(dig_env.data_bus_uvc_agt.sequencer);
 
   endtask : read_reg
 

@@ -50,7 +50,7 @@
     //  `WAIT_NS(10)
     //  dig_env.p_dig_cfg.dig_vif.rstn_i = 1;
      drive_reset(10, TIME_LENGTH);
-    `WAIT_MS(1)
+    `WAIT_US(10)
      // MODE0
      `uvm_info("COUNTER_MODE_TEST", "Configure COUNTER MODE", UVM_NONE)
      data_bus_write_seq.address = `CNT_TIMER_MODE0_ADDR;
@@ -80,6 +80,8 @@
 
      data_bus_read_seq.address = `CNT_TIMER_MODE1_ADDR;
      data_bus_read_seq.start(dig_env.data_bus_uvc_agt.sequencer);
+    // Inside a test, to start a transaction, always use seq.start(sequencer)
+
 
      // set counter mode - use regs function
      `uvm_info("COUNTER_MODE_TEST", "Change to COUNTER MODE", UVM_NONE)
@@ -88,8 +90,12 @@
       //TODO DAY3: Add stimulus to toggle the selected input 10 times with a period of 100ns
       drive_input_pulses(this.select_input, 10, 50);
       //TODO DAY4: Refactor the stimulus to toggle the selected input using a dedicated pin toggle sequence
-
-     `WAIT_MS(20)
+      `WAIT_NS(100)
+      pin_toggle_seq.half_period_ns = 50;
+      pin_toggle_seq.num_of_toggles = 10;
+      pin_toggle_seq.selected_pin = this.select_input + 1;
+      pin_toggle_seq.start(dig_env.pin_sequencer);
+     `WAIT_NS(600)
 
 
      phase.drop_objection(this);

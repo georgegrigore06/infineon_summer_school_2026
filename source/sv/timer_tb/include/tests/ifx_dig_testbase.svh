@@ -24,6 +24,7 @@ class ifx_dig_testbase extends uvm_test;
   ifx_dig_data_bus_uvc_sequence data_bus_seq;
   ifx_dig_data_bus_uvc_write_sequence data_bus_write_seq;
   ifx_dig_data_bus_uvc_read_sequence data_bus_read_seq;
+  ifx_dig_data_bus_uvc_write_read_sequence data_bus_write_read_seq;
 
   //=========================================================================
   // Variables.
@@ -48,6 +49,7 @@ class ifx_dig_testbase extends uvm_test;
   // TODO DAY3: Implement drive reset task which can drive reset for a given length in cycles or time depending on the input arguments
   task drive_reset(int length, reset_length_t reset_type);
     time start_time, end_time, clock_period;
+    dig_cfg.dig_vif.rstn_i = 0;
     @(posedge dig_cfg.dig_vif.clk_i);
     start_time = $realtime;
     @(posedge dig_cfg.dig_vif.clk_i);
@@ -59,21 +61,20 @@ class ifx_dig_testbase extends uvm_test;
       case(reset_type)
         TIME_LENGTH:
           begin
-            dig_cfg.dig_vif.rstn_i = 0;
-            #(length);
+            #(length - 2*clock_period);
             @(negedge dig_cfg.dig_vif.clk_i);
             dig_cfg.dig_vif.rstn_i = 1;
           end
         CYCLES:
-          begin
-              dig_cfg.dig_vif.rstn_i = 0;
-              repeat(length) @(negedge dig_cfg.dig_vif.clk_i);
+          begin  
+              @(negedge dig_cfg.dig_vif.clk_i);
+              repeat(length-2) @(negedge dig_cfg.dig_vif.clk_i);
               dig_cfg.dig_vif.rstn_i = 1;
           end
       endcase
-    else begin
-      dig_cfg.dig_vif.rstn_i = 0;
-      repeat(2) @(negedge dig_cfg.dig_vif.clk_i);
+    else begin  
+      @(posedge dig_cfg.dig_vif.clk_i);
+      @(negedge dig_cfg.dig_vif.clk_i);
       dig_cfg.dig_vif.rstn_i = 1;
     end
   endtask : drive_reset
@@ -128,6 +129,8 @@ class ifx_dig_testbase extends uvm_test;
     data_bus_seq        = ifx_dig_data_bus_uvc_sequence::type_id::create("data_bus_seq", this);
     data_bus_read_seq   = ifx_dig_data_bus_uvc_read_sequence::type_id::create("data_bus_read_seq", this);
     data_bus_write_seq  = ifx_dig_data_bus_uvc_write_sequence::type_id::create("data_bus_write_seq", this);
+    data_bus_write_read_seq = ifx_dig_data_bus_uvc_write_read_sequence::type_id::create("data_bus_write_read_seq", this);
+    pin_toggle_seq = ifx_pin_toggle_sequence::type_id::create("pin_toggle_seq", this);
     `uvm_info(get_full_name(), ">>>>> TESTBASE BUILD_PHASE done <<<<<", UVM_NONE)
   endfunction : build_phase
 
@@ -167,20 +170,24 @@ class ifx_dig_testbase extends uvm_test;
   //-------------------------------------------------------------------------
   //=========================================================================
 
-  task write_reg_fields(string reg_name, string fields_names[]={}, int fields_values[]={}, read_after_write = 0);
+  task write_reg_fields(string reg_name, string fields_names[]={}, int fields_values[]={}, read_after_write = 0, is_random = 0, int random_data = 0);
     ifx_dig_data_bus_uvc_write_sequence write_seq;
     ifx_dig_reg reg_obj = dig_env.scoreboard.regblock.get_reg_by_name(reg_name);
 
     write_seq         = ifx_dig_data_bus_uvc_write_sequence::type_id::create("write_seq", this);
     write_seq.address = reg_obj.get_address();
-    write_seq.data    = reg_obj.get_reg_value();
-    `uvm_info("DEBUG", $sformatf("Reg value before write = %b", write_seq.data), UVM_NONE)
-
-    foreach(fields_names[idx]) begin
-      ifx_dig_field field_obj = reg_obj.get_field_by_name(fields_names[idx]);
-      int field_val           = (2**field_obj.get_size() -1) & fields_values[idx];
-      for(int pos=0 ;pos<=field_obj.get_size()-1; pos++) begin
-        write_seq.data[pos+field_obj.get_lsb_possition()] = field_val[pos];
+    if(is_random) begin
+      write_seq.data = random_data;
+    end
+    else begin 
+      write_seq.data    = reg_obj.get_reg_value();
+      `uvm_info("DEBUG", $sformatf("Reg value before write = %b", write_seq.data), UVM_NONE)
+      foreach(fields_names[idx]) begin
+        ifx_dig_field field_obj = reg_obj.get_field_by_name(fields_names[idx]);
+        int field_val           = (2**field_obj.get_size() -1) & fields_values[idx];
+        for(int pos=0 ;pos<=field_obj.get_size()-1; pos++) begin
+          write_seq.data[pos+field_obj.get_lsb_possition()] = field_val[pos];
+        end
       end
     end
     `uvm_info("write_reg_fields", $sformatf("Write register %s fields %p with values %p", reg_name, fields_names, fields_values), UVM_NONE)
@@ -194,6 +201,15 @@ class ifx_dig_testbase extends uvm_test;
 
   // TODO DAY4: Implement a task for reading a register using the data bus read sequence
   task read_reg(string reg_name);
+    ifx_dig_data_bus_uvc_read_sequence read_seq;
+    ifx_dig_reg reg_obj =  dig_env.scoreboard.regblock.get_reg_by_name(reg_name);
+
+    read_seq = ifx_dig_data_bus_uvc_read_sequence::type_id::create("read_seq", this);
+    read_seq.address = reg_obj.get_address();
+
+    `uvm_info("read_reg", $sformatf("Read register %s value", reg_name), UVM_NONE)
+    read_seq.start(dig_env.data_bus_uvc_agt.sequencer);
+    
 
   endtask : read_reg
 

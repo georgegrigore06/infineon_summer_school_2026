@@ -19,5 +19,4 @@ package ifx_dig_data_bus_uvc_pkg;
   `include "ifx_dig_data_bus_uvc_driver.svh"
   `include "ifx_dig_data_bus_uvc_monitor.svh"
   `include "ifx_dig_data_bus_uvc_agent.svh"
-
 endpackage

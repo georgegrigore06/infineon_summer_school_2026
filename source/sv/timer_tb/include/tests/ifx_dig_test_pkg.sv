@@ -19,4 +19,5 @@ package ifx_dig_test_pkg;
 
   `include "ifx_dig_counter_mode_test.svh"
 	`include "ifx_dig_hello_world.svh"
+  `include "ifx_dig_sfr_test.svh"
 endpackage

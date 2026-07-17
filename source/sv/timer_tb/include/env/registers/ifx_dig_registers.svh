@@ -106,7 +106,7 @@ class ifx_dig_reg_CTRL0 extends ifx_dig_reg;
   ifx_dig_field mode;
   ifx_dig_field res;
 
-  function new(string name = "CTRL0");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -131,7 +131,7 @@ class ifx_dig_reg_PWM_MODE extends ifx_dig_reg;
   ifx_dig_field frequency_sel;
   ifx_dig_field res[0:1];
 
-  function new(string name = "PWM_MODE");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -166,7 +166,7 @@ class ifx_dig_reg_CNT_TIMER_MODE0 extends ifx_dig_reg;
   ifx_dig_field capture_sel;
   ifx_dig_field res[0:2];
 
-  function new(string name = "CNT_TIMER_MODE0");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -206,7 +206,7 @@ class ifx_dig_reg_CNT_TIMER_MODE1 extends ifx_dig_reg;
   ifx_dig_field target_value;
   ifx_dig_field res;
 
-  function new(string name = "CNT_TIMER_MODE1");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -231,7 +231,7 @@ class ifx_dig_reg_ACT_CNT_VALUE extends ifx_dig_reg;
   ifx_dig_field counter_value;
   ifx_dig_field res;
 
-  function new(string name = "ACT_CNT_VALUE");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -257,7 +257,7 @@ class ifx_dig_reg_COMMAND extends ifx_dig_reg;
   ifx_dig_field sw_trigger;
   ifx_dig_field res[0:1];
 
-  function new(string name = "COMMAND");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -291,7 +291,7 @@ class ifx_dig_reg_CAPTURE_STATUS extends ifx_dig_reg;
   ifx_dig_field timer_running;
   ifx_dig_field res[0:1];
 
-  function new(string name = "CAPTURE_STATUS");
+  function new(string name = "");
     super.new(name);
   endfunction
 

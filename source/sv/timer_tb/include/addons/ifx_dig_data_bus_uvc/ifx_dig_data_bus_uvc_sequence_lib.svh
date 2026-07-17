@@ -20,8 +20,11 @@ class ifx_dig_data_bus_uvc_sequence extends uvm_sequence #(ifx_dig_data_bus_uvc_
   endfunction
 
   virtual task body ();
-
-    `uvm_create(seq_item)
+    // `uvm_create(seq_item)
+    seq_item = ifx_dig_data_bus_uvc_seq_item::type_id::create("seq_item");
+    
+    start_item(seq_item);
+    
     if (is_random_b) begin
       void'(seq_item.randomize());
     end
@@ -33,7 +36,8 @@ class ifx_dig_data_bus_uvc_sequence extends uvm_sequence #(ifx_dig_data_bus_uvc_
 
     `uvm_info(get_type_name(), $sformatf("Executing sequence with parameters access_type=%p address=%d data=%0d", seq_item.access_type, seq_item.address, seq_item.data), UVM_MEDIUM)
 
-    `uvm_send(seq_item)
+    // `uvm_send(seq_item)
+    finish_item(seq_item);
 
     `uvm_info(get_type_name()," Item finished ", UVM_MEDIUM)
   endtask
@@ -125,9 +129,9 @@ class ifx_dig_data_bus_uvc_write_read_sequence extends uvm_sequence #(ifx_dig_da
 
   bit[`AWIDTH-1:0] address;
   bit[`DWIDTH-1:0] data;
-  bit is_random_b;
+  bit is_random_b = 0;
 
-  function new(string name = "ifx_dig_data_bus_uvc_write_read_sequence");
+  function new(string name = "");
     super.new(name);
   endfunction
 
@@ -150,8 +154,11 @@ class ifx_dig_data_bus_uvc_write_read_sequence extends uvm_sequence #(ifx_dig_da
       write_seq.data = data;
       read_seq.address = address;
     end
-    `uvm_do(this.write_seq)
-    `uvm_do(this.read_seq)
+
+    `uvm_send(write_seq) // Always use uvm_send/do() inside a composed sequence
+    `uvm_send(read_seq) // for child sequences, because it automatically 
+                      // used the parent sequence sequencer
+
   endtask : body
 
 endclass

@@ -51,9 +51,9 @@ class ifx_dig_regblock extends uvm_object;
     case(reg_name)
       "CTRL0"          : return CTRL0;
       "PWM_MODE"       : return PWM_MODE;
-      "CNT_MODE0"      : return CNT_TIMER_MODE0;
-      "CNT_MODE1"      : return CNT_TIMER_MODE1;
-      "COUNTER_VALUE"  : return ACT_CNT_VALUE;
+      "CNT_TIMER_MODE0"      : return CNT_TIMER_MODE0;
+      "CNT_TIMER_MODE1"      : return CNT_TIMER_MODE1;
+      "ACT_CNT_VALUE"  : return ACT_CNT_VALUE;
       "COMMAND"        : return COMMAND;
       "CAPTURE"        : return CAPTURE_STATUS;  
       default: 

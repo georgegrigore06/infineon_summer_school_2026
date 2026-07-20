@@ -50,7 +50,7 @@
     //  `WAIT_NS(10)
     //  dig_env.p_dig_cfg.dig_vif.rstn_i = 1;
      drive_reset(10, TIME_LENGTH);
-    `WAIT_US(10)
+    `WAIT_NS(100)
      // MODE0
      `uvm_info("COUNTER_MODE_TEST", "Configure COUNTER MODE", UVM_NONE)
      data_bus_write_seq.address = `CNT_TIMER_MODE0_ADDR;
@@ -95,7 +95,7 @@
       pin_toggle_seq.num_of_toggles = 10;
       pin_toggle_seq.selected_pin = this.select_input + 1;
       pin_toggle_seq.start(dig_env.pin_sequencer);
-     `WAIT_NS(600)
+     `WAIT_US(1)
 
 
      phase.drop_objection(this);

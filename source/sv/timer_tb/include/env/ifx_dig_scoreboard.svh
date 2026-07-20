@@ -58,14 +58,14 @@ endfunction : new
 
 function void ifx_dig_scoreboard::build_phase(uvm_phase phase);
   super.build_phase(phase);
-  // TODO DAY2: Add infomessage for this phase
   `uvm_info(get_full_name(), ">>>>> SCOREBOARD BUILD_PHASE starts <<<<<", UVM_NONE)
 
   regblock = ifx_dig_regblock::type_id::create("regblock");
   regblock.build();
 
-  // TODO DAY5: Get a handler to the virtual interface using the uvm_config_db mechanism
-
+  if (!uvm_config_db #(virtual ifx_dig_interface)::get(null, "", "dig_if", dig_vif)) begin
+    `uvm_fatal("NO_VIF", "Interfața virtuală dig_vif nu a putut fi găsită în uvm_config_db!")
+end
 
 
   `uvm_info(get_full_name(), ">>>>> SCOREBOARD BUILD_PHASE done <<<<<", UVM_NONE)
@@ -74,7 +74,7 @@ endfunction : build_phase
 
 function void ifx_dig_scoreboard::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
-  // TODO DAY2: Add infomessage for this phase
+
   `uvm_info(get_full_name(), ">>>>> SCOREBOARD CONNECT_PHASE starts <<<<<", UVM_NONE)
   // add connections
   `uvm_info(get_full_name(), ">>>>> SCOREBOARD CONNECT_PHASE done <<<<<", UVM_NONE)
@@ -88,7 +88,11 @@ endfunction : end_of_elaboration_phase
 
 task ifx_dig_scoreboard::run_phase(uvm_phase phase);
 
-  // TODO DAY5: Add code allowing the golden model, checkers and coverage to run in parallel
-
+  `uvm_info(get_full_name(), ">>>>> SCOREBOARD RUN_PHASE starts <<<<<", UVM_NONE)
+  fork
+    golden_model();
+    do_checkers();
+    collect_coverage();
+  join
 endtask : run_phase
 

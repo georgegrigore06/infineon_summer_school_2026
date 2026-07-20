@@ -98,7 +98,6 @@ class ifx_dig_reg extends uvm_object;
 endclass
 
 
-
 class ifx_dig_reg_CTRL0 extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_CTRL0)
@@ -121,9 +120,6 @@ class ifx_dig_reg_CTRL0 extends ifx_dig_reg;
   endfunction
 endclass
 
-
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_PWM_MODE extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_PWM_MODE)
@@ -154,8 +150,6 @@ class ifx_dig_reg_PWM_MODE extends ifx_dig_reg;
 endclass
 
 
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_CNT_TIMER_MODE0 extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_CNT_TIMER_MODE0)
@@ -197,8 +191,6 @@ class ifx_dig_reg_CNT_TIMER_MODE0 extends ifx_dig_reg;
   endfunction
 endclass
 
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_CNT_TIMER_MODE1 extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_CNT_TIMER_MODE1)
@@ -222,8 +214,6 @@ class ifx_dig_reg_CNT_TIMER_MODE1 extends ifx_dig_reg;
   endfunction
 endclass
 
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_ACT_CNT_VALUE extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_ACT_CNT_VALUE)
@@ -247,8 +237,6 @@ class ifx_dig_reg_ACT_CNT_VALUE extends ifx_dig_reg;
   endfunction
 endclass
 
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_COMMAND extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_COMMAND)
@@ -281,8 +269,6 @@ class ifx_dig_reg_COMMAND extends ifx_dig_reg;
   endfunction
 endclass
 
-
-// TODO DAY2: Create the register and its fields
 class ifx_dig_reg_CAPTURE_STATUS extends ifx_dig_reg;
 
   `uvm_object_utils(ifx_dig_reg_CAPTURE_STATUS)

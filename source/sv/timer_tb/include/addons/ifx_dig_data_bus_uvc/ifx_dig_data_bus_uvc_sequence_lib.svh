@@ -87,7 +87,7 @@ class ifx_dig_data_bus_uvc_write_sequence extends uvm_sequence #(ifx_dig_data_bu
 
   `uvm_object_utils(ifx_dig_data_bus_uvc_write_sequence)
 
-  ifx_dig_data_bus_uvc_seq_item seq_item;
+  ifx_dig_data_bus_uvc_seq_item seq_item; // I could directly use req
 
   bit[`AWIDTH-1:0] address;
   bit[`DWIDTH-1:0] data;

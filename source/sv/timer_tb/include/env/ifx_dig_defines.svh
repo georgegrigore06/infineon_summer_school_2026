@@ -11,7 +11,7 @@
 
 `define DWIDTH    16    // Data bus width
 `define AWIDTH    3
-`define EXT_INPUTS_NB 16
+`define EXT_INPUTS_NB 15
 
 `define CTRL0_ADDR            3'd0
 `define PWM_MODE_ADDR         3'd1

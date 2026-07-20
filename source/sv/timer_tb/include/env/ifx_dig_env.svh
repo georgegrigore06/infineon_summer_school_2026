@@ -14,7 +14,6 @@ class ifx_dig_env extends uvm_env;
 
   ifx_dig_data_bus_uvc_agent data_bus_uvc_agt;
 
-  // TODO DAY4: Declare an object called pin_sequencer for the pin_toggle sequencer and create the instance in the appropriate phase
   ifx_dig_pin_sequencer pin_sequencer;
   ifx_dig_pin_driver pin_driver;
 
@@ -26,7 +25,6 @@ class ifx_dig_env extends uvm_env;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    // TODO DAY2: Add infomessage for this phase
     `uvm_info (get_type_name(), $sformatf(">>>>> ENV BUILD_PHASE starts <<<<<"), UVM_LOW)
 
     scoreboard = ifx_dig_scoreboard::type_id::create("scoreboard", this);
@@ -45,7 +43,6 @@ class ifx_dig_env extends uvm_env;
 
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    // TODO DAY2: Add infomessage for this phase
     `uvm_info (get_type_name(), $sformatf(">>>>> ENV CONNECT_PHASE starts <<<<<"), UVM_LOW)
 
     scoreboard.p_env = this;
@@ -54,8 +51,7 @@ class ifx_dig_env extends uvm_env;
     pin_driver.seq_item_port.connect(pin_sequencer.seq_item_export);
     pin_driver.vif = p_dig_cfg.dig_vif;
 
-    // TODO DAY5: Connect the TLM ports of the data bus monitor to the corresponding TLM export in the scoreboard
-
+    data_bus_uvc_agt.monitor.mon_port.connect(scoreboard.data_bus_uvc_imp);
 
     `uvm_info (get_type_name(), $sformatf(">>>>> ENV CONNECT_PHASE done <<<<<"), UVM_LOW)
 

@@ -36,10 +36,8 @@ int configured_target_value;
 int configured_trigger_selection;
 int configured_capture_selection;
 
-virtual ifx_dig_interface vif;
-
-  bit ext_in_mux_b;
-  bit ext_in_mux_synch_b;
+bit ext_in_mux_b;
+bit ext_in_mux_synch_b;
 
 task golden_model();
   fork
@@ -63,8 +61,6 @@ endtask
 
 
 task monitor_inputs();
-
-
   fork
     forever begin
       if(configured_input_select_b != 0)
@@ -89,23 +85,28 @@ endtask
 
 task update_reg_variables();
   forever begin
-    // TODO DAY5: Brick 1 - read the register fields that define the current configuration.
     configured_mode              = mode_t'(regblock.get_field_value("CTRL0", "mode"));
-    configured_input_select_b    = 0;
-    configured_sw_input_b        = 0;
-    configured_trigger_selection = 0;
-    configured_target_value      = 0;
-    configured_capture_selection = 0;
+    configured_input_select_b    = regblock.get_field_value("CNT_TIMER_MODE0", "input_sel");
+    configured_sw_input_b        = regblock.get_field_value("COMMAND", "sw_trigger");
+    configured_trigger_selection = regblock.get_field_value("CNT_TIMER_MODE0", "trigger_sel");
+    configured_target_value      = regblock.get_field_value("CNT_TIMER_MODE1", "target_value");
+    configured_capture_selection = regblock.get_field_value("CNT_TIMER_MODE0", "capture_sel");
 
-    // TODO DAY5: Brick 2 - detect a clear command and notify the rest of the model.
-
+    if(regblock.get_field_value("COMMAND", "clear")) begin
+      ->counter_clear_e;
+    end
 
     // TODO DAY5: Brick 3 - decode the PWM frequency selection into a real frequency value.
-   
+   case(regblock.get_field_value("PWM_MODE", "frequency_sel"))
+    2'b00: configured_pwm_frequency = 100;
+    2'b01: configured_pwm_frequency = 200;
+    2'b10: configured_pwm_frequency = 320;
+    2'b11: configured_pwm_frequency = 400;
+   endcase
 
     // TODO DAY5: Brick 4 - Decode duty cycle value from register value.
-    configured_duty_cycle = 0;
-
+    configured_duty_cycle = regblock.get_field_value("PWM_MODE", "duty_cycle");
+    if(configured_duty_cycle > 1000) configured_duty_cycle = 1000;
     @(reg_write_e, regblock_reset_e);
   end
 endtask
@@ -177,7 +178,6 @@ task model_counter_mode();
         expected_counter_value += 1;
         if(expected_counter_value == configured_target_value) begin
           -> update_expected_output_o_e;
-//          @(counter_clear_e); // TODO - is this ok?
           @(posedge dig_vif.clk_i);
           expected_counter_value = 0;
         end
@@ -310,20 +310,24 @@ endtask
 
 
 task model_expected_output_o();
-  // TODO Day 5: Initialize the expected DUT output before processing output events.
+  // Initialize the expected DUT output before processing output events.
+  expected_output_o = 0;
   forever begin
-    // TODO Day 5: Wait for the event that indicates the counter or timer reached its target.
+    // Wait for the event that indicates the counter or timer reached its target.
     @(update_expected_output_o_e);
 
-    // TODO Day 5: Align the expected output update with the DUT clock.
+    // Align the expected output update with the DUT clock.
     @(posedge dig_vif.clk_i);
 
-    if(!regblock.get_field_value("CNT_TIMER_MODE0", "out_fct")) begin
-      // TODO Day 5: Generate a one-cycle pulse on the expected output.
-
+    if(!regblock.get_field_value("CNT_TIMER_MODE0", "out_function")) begin
+      // Generate a one-cycle pulse on the expected output.
+      expected_output_o = 1;
+      @(negedge dig_vif.clk_i);
+      expected_output_o = 0;
     end else begin
-      // TODO Day 5: Toggle the expected output and clear the expected counter value.
-
+      // Toggle the expected output and clear the expected counter value.
+      expected_output_o = ~expected_output_o;
+      expected_counter_value = 0;
     end
   end
 endtask

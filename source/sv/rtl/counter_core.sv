@@ -89,15 +89,15 @@ begin
 end
 
 
-always_ff @(posedge clk_i or negedge rstn_i)
+always_comb
 begin
-    if(!rstn_i) out_o <= 0;
+    if(!rstn_i) out_o = 0;
     else
         case(counter_mode)
-            0: out_o <= 0;
-            1: out_o <= w_pwm;
-            2: out_o <= w_counter_timer;
-            3: out_o <= w_counter_timer;
+            0: out_o = 0;
+            1: out_o = w_pwm;
+            2: out_o = w_counter_timer;
+            3: out_o = w_counter_timer;
         endcase
 end
 

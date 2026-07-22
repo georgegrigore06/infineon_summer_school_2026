@@ -105,8 +105,8 @@ task update_reg_variables();
    endcase
 
     // TODO DAY5: Brick 4 - Decode duty cycle value from register value.
-    configured_duty_cycle = regblock.get_field_value("PWM_MODE", "duty_cycle");
-    if(configured_duty_cycle > 1000) configured_duty_cycle = 1000;
+    configured_duty_cycle = real'(regblock.get_field_value("PWM_MODE", "duty_cycle"))/1023;
+    if(configured_duty_cycle > 1) configured_duty_cycle = 1;
     @(reg_write_e, regblock_reset_e);
   end
 endtask
@@ -133,23 +133,25 @@ task monitor_pwm_output();
             // do nothing here - dedicated checker
             // frequency and duty cycle cannot be measure
             measured_pwm_uncertainty_b = 1;
+            @(configured_duty_cycle);
           end
           1.0: begin
             // do nothing here - dedicated checker
             // frequency and duty cycle cannot be measure
             measured_pwm_uncertainty_b = 1;
+            @(configured_duty_cycle);
           end
           default: begin
             measured_pwm_uncertainty_b = 1;
-            @(negedge dig_vif.output_o) t_fall = $realtime();
+            @(posedge dig_vif.output_o) t_rise = $realtime();
             forever begin
-              @(posedge dig_vif.output_o) t_rise = $realtime();
-              @(negedge dig_vif.output_o);
-              t_period = $realtime() - t_fall; // period measured from falling to falling
-              t_fall   = $realtime();
-
+              @(negedge dig_vif.output_o) t_fall = $realtime();
+              @(posedge dig_vif.output_o);
+              t_period = $realtime() - t_rise; // period measured from falling to falling
+              `uvm_info("pwm_monitoring_fork", $sformatf("Posedge: %t, Negedge: %t, Period: %t", t_rise, t_fall, t_period), UVM_NONE)
               measured_pwm_frequency  = 1.0s/t_period;
               measured_pwm_duty_cycle = (t_fall - t_rise)/t_period;
+              t_rise = $realtime();
 
               measured_pwm_uncertainty_b = 0;
               ->pwm_period_measured_e;

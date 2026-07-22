@@ -16,16 +16,12 @@ class ifx_dig_sfr_test extends ifx_dig_testbase;
         
         super.run_phase(phase);
         phase.raise_objection(this);
-        void'(this.randomize());
 
         drive_reset(100, TIME_LENGTH);
         
-        write_reg_fields(.reg_name("CNT_TIMER_MODE0"), .read_after_write(1), .is_random(1), .random_data(data));
-        `WAIT_NS(100);
-        write_reg_fields(.reg_name("CTRL0"), .read_after_write(1), .is_random(1), .random_data(data));
-        `WAIT_NS(500);
-        read_reg("ACT_CNT_VALUE");
-        `WAIT_NS(100);
+        write_reg_fields(.reg_name("PWM_MODE"), .fields_names({"duty_cycle", "frequency_sel"}), .fields_values({512, 2'b11}), .read_after_write(1));
+        write_reg_fields(.reg_name("CTRL0"), .fields_names({"mode"}), .fields_values({2'b01}), .read_after_write(1));
+        `WAIT_MS(20)
 
 
 

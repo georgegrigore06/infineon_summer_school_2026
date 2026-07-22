@@ -52,7 +52,9 @@ always_comb begin
             3: rdata_o = CNT_MODE1;
             4: rdata_o = COUNTER_VALUE;
             6: rdata_o = CAPTURE_VALUE;
+            default rdata_o = 0;
         endcase
+    else rdata_o = 0;
 end
 
 assign input_selection = CNT_MODE0[3:0];

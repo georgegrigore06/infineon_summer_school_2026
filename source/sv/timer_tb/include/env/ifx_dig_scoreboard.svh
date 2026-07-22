@@ -87,12 +87,17 @@ function void ifx_dig_scoreboard:: end_of_elaboration_phase(uvm_phase phase);
 endfunction : end_of_elaboration_phase
 
 task ifx_dig_scoreboard::run_phase(uvm_phase phase);
-
   `uvm_info(get_full_name(), ">>>>> SCOREBOARD RUN_PHASE starts <<<<<", UVM_NONE)
   fork
-    golden_model();
-    do_checkers();
-    collect_coverage();
+    begin
+      golden_model();
+    end
+    begin
+      do_checkers();
+    end
+    begin
+      collect_coverage();
+    end
   join
 endtask : run_phase
 

@@ -49,7 +49,7 @@
     //  dig_env.p_dig_cfg.dig_vif.rstn_i = 0;
     //  `WAIT_NS(10)
     //  dig_env.p_dig_cfg.dig_vif.rstn_i = 1;
-     drive_reset(10, TIME_LENGTH);
+     drive_reset(100, TIME_LENGTH);
     `WAIT_NS(100)
      // MODE0
      `uvm_info("COUNTER_MODE_TEST", "Configure COUNTER MODE", UVM_NONE)

@@ -5,6 +5,8 @@
  */
 
 `include "ifx_dig_defines.svh"
+import uvm_pkg::*;
+`include "uvm_macros.svh"
 
 interface ifx_dig_interface (
 
@@ -21,8 +23,13 @@ interface ifx_dig_interface (
     input bit output_o
   );
 
-  // TODO DAY6: Add SVA assertions to check the reset values of the outputs
-  
+  property output_reset_value;
+    @(posedge clk_i) (!rstn_i) |-> (output_o == 1'b0);
+  endproperty
+
+  dchk_06_output_on_reset: assert property (output_reset_value)
+   else `uvm_error("dchk_06_output_on_reset", $sformatf("Expecting output_o to be 0, got %b instead", output_o))
+
   initial begin
     inputs_i = 0;
     #2ms;

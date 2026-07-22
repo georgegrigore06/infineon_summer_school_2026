@@ -157,7 +157,7 @@ class ifx_dig_data_bus_uvc_write_read_sequence extends uvm_sequence #(ifx_dig_da
 
     `uvm_send(write_seq) // Always use uvm_send/do() inside a composed sequence
     `uvm_send(read_seq) // for child sequences, because it automatically 
-                      // used the parent sequence sequencer
+                      // uses the parent-sequence sequencer
 
   endtask : body
 

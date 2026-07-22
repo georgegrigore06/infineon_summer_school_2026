@@ -13,10 +13,6 @@ task collect_coverage();
   join
 endtask
 
-// TODO DAY6: Add covergroup proving that each input slecetion was used in all available modes.
-
-// TODO DAY6: Add more covergroups that you see fit.
-
 covergroup dcov_00_pwm_configuration with function sample();
   option.name         = "dcov_00_pwm_configuration";
   option.per_instance = 1;
